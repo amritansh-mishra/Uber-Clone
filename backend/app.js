@@ -8,13 +8,13 @@ connectDB(); // Connect to MongoDB
 
 const userRoutes = require('./routes/userRoutes'); // Import user routes
 
-
+app.use(express.json()); // Middleware to parse JSON bodies 
+app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies
 
 
 app.use("/users", userRoutes); // Use user routes for /users endpoint
 app.use(cors());
-app.use(express.json()); // Middleware to parse JSON bodies 
-app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies
+
 
 
 app.get('/', (req, res) => {

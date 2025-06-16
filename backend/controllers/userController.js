@@ -7,14 +7,22 @@ const { validationResult } = require('express-validator');
 
 
 
-module.exports.registerUser = async (req, res) => {  //iske ander user ko register krne ka logic likhna hai
+module.exports.registerUser = async (req, res , next) => {  //iske ander user ko register krne ka logic likhna hai
     const errors = validationResult(req);
      if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
-    }
-    console.log(req.body); //logging the request body to console for debugging
 
+    }
+
+    
     const {fullname, email, password } = req.body; //destructuring the request body to get user details
+
+    const isUserAlready = await userModel.findOne({ email });
+
+    if (isUserAlready) {
+        return res.status(400).json({ message: 'User already exist' });
+    }
+    
 
     const hashedPassword = await userModel.hashPassword(password); //hashing the password using userModel method
 
